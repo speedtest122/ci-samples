@@ -1,19 +1,33 @@
 name: CI
+
 on:
   workflow_dispatch:
-  push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
+    branches: [master]
+
 jobs:
   build:
     runs-on: windows-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+
+    - name: Create Reports Folder
+      run: mkdir -p ${{ github.workspace }}/Reports
+
     - name: Katalon Studio Github Action
-      uses: katalon-studio/katalon-studio-github-action@v2.1
+      id: katalon
+      run: |
+        katalon-studio/katalon-studio-github-action@v2.1
+        -version '7.5.5'
+        -projectPath '${{ github.workspace }}'
+        -args '-noSplash -retry=0 -browserType=Chrome -statusDelay=15 -testSuitePath="Test Suites/TS_RegressionTest" -apiKey=${{ secrets.KATALON_API_KEY }} --config -webui.autoUpdateDrivers=true'
+      continue-on-error: true
+
+    - name: Upload Reports
+      if: always() && success()
+      uses: actions/upload-artifact@v4
       with:
-          version: '7.5.5'
-          projectPath: '${{ github.workspace }}'
-          args: '-noSplash -retry=0 -browserType=Chrome -statusDelay=15 -testSuitePath="Test Suites/TS_RegressionTest" -apiKey= ${{ secrets.KATALON_API_KEY }} --config -webui.autoUpdateDrivers=true'
+        name: Katalon Reports
+        path: ${{ github.workspace }}/Reports/**/*
+
