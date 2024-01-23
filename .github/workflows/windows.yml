@@ -9,11 +9,23 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+    - name: Install specific version of Chrome
+      run: |
+        $ChromeVersion = "120.0.6099.217"
+        Invoke-WebRequest "https://dl.google.com/tag/s/dl/chrome/install/$ChromeVersion/chrome_installer.exe" -OutFile "chrome_installer.exe"
+        Start-Process chrome_installer.exe -ArgumentList '/silent', '/install' -Wait
+  
+    - name: Install specific ChromeDriver
+      run: |
+        $ChromeMajorVersion = "120.0.6099.217"
+        $ChromeDriverVersion = Invoke-RestMethod -Uri "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$ChromeMajorVersion"
+        Invoke-WebRequest "https://chromedriver.storage.googleapis.com/$ChromeDriverVersion/chromedriver_win32.zip" -OutFile "chromedriver_win32.zip"
+        Expand-Archive "chromedriver_win32.zip" -DestinationPath "C:\Windows\System32"
 
     - name: Katalon Studio Github Action
-      uses: katalon-studio/katalon-studio-github-action@v2.1
+      uses: katalon-studio/katalon-studio-github-action@v3.0
       with:
-          version: '7.5.5'
+          version: '8.5.5'
           projectPath: '${{ github.workspace }}'
           args: '-noSplash -retry=0 -browserType=Chrome -statusDelay=15 -testSuitePath="Test Suites/TS_RegressionTest" -apiKey=${{ secrets.KATALON_API_KEY }} --config -webui.autoUpdateDrivers=true'
 
