@@ -9,19 +9,23 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - uses: nanasess/setup-chromedriver@v2
-      with:
-        # Optional: do not specify to match Chrome's version
-        chromedriver-version: '107.0.5304.62'
-    - run: chromedriver --url-base=/wd/hub &
-
+    - name: Download ChromeDriver
+      run: |
+          curl -L https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/120.0.6099.109/win32/chromedriver-win32.zip -o chromedriver.zip
+    - name: Unzip ChromeDriver
+      run: |
+          unzip chromedriver.zip
+    - name: Replace existing ChromeDriver
+      run: |
+        move chromedriver.exe "%ProgramFiles%\Katalon_Studio_Windows_{version}\configuration\resources\drivers"
+        
     - name: Katalon Studio Github Action
       uses: katalon-studio/katalon-studio-github-action@v3.0
       with:
           version: '8.5.5'
           projectPath: '${{ github.workspace }}'
-          args: '-noSplash -retry=0 -browserType=Chrome -statusDelay=15 -testSuitePath="Test Suites/TS_RegressionTest" -apiKey=${{ secrets.KATALON_API_KEY }} --config -webui.autoUpdateDrivers=true'
-
+          args: '-noSplash -retry=0 -browserType=Chrome -statusDelay=15 -testSuitePath="Test Suites/TS_RegressionTest" -apiKey=${{ secrets.KATALON_API_KEY }} --config -webui.autoUpdateDrivers=true -webDriverConfigPath: "%ProgramFiles%\Katalon_Studio_Windows_{version}\configuration\resources\drivers\chromedriver.exe"'
+  
     - name: Upload Reports
       if: always()
       uses: actions/upload-artifact@v4
