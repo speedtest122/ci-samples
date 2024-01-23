@@ -9,7 +9,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup chromedriver
     - uses: nanasess/setup-chromedriver@v2
       with:
         # Optional: do not specify to match Chrome's version
