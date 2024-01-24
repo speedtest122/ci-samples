@@ -20,7 +20,7 @@ jobs:
       with:
           version: '8.5.5'
           projectPath: '${{ github.workspace }}'
-          args: '-noSplash -retry=0 -browserType=Chrome -statusDelay=15 -testSuitePath="Test Suites/TS_RegressionTest" -apiKey=${{ secrets.KATALON_API_KEY }} -Dwebdriver.chrome.driver=chromedriver-win32/chromedriver.exe'
+          args: '--config -webui.autoUpdateDrivers=true -noSplash -retry=0 -browserType=Chrome -statusDelay=15 -testSuitePath="Test Suites/TS_RegressionTest" -apiKey=${{ secrets.KATALON_API_KEY }}'
     - name: Upload Reports
       if: always()
       uses: actions/upload-artifact@v4
