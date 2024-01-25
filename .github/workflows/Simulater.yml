@@ -14,7 +14,7 @@ jobs:
       with:
           version: '9.2.0'
           projectPath: '${{ github.workspace }}'
-          args: '--config -webui.autoUpdateDrivers=true -noSplash -retry=0 -browserType=Chrome -statusDelay=15 -testSuitePath="Test Suites/TS_RegressionTest" -apiKey=${{ secrets.KATALON_API_KEY }}'
+          args: '--config -webui.autoUpdateDrivers=true -noSplash -retry=0 -browserType=Chrome -statusDelay=15 -testSuitePath="Test Suites/TS_RegressionTest" -apiKey=${{ secrets.KATALON_API_KEY }}-browserType="Android" -deviceId="emulator-5554" -executionProfile="default" -apiKey="4fc909b3-6365-4efa-a8d0-2522727214ad" --config -proxy.auth.option=NO_PROXY -proxy.system.option=NO_PROXY -proxy.system.applyToDesiredCapabilities=true'
     - name: Upload Reports
       if: always()
       uses: actions/upload-artifact@v4
