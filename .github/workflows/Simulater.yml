@@ -9,6 +9,13 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+        
+      - name: Katalon Studio Github Action
+        uses: katalon-studio/katalon-studio-github-action@v3.0
+        with:
+          version: '9.0.0'
+          projectPath: '${{ github.workspace }}'
+         
 
       - name: Enable KVM
         run: |
@@ -23,6 +30,5 @@ jobs:
             echo $GITHUB_REPOSITORY
             adb devices
   
-      - name: Enable emulator
-        run: adb emu start emulator-5554
+
            
