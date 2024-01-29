@@ -12,7 +12,8 @@ jobs:
         
       - name: Katalon Studio Github Action
         uses: katalon-studio/katalon-studio-github-action@v3.0
-
+        with:
+                  version: '8.5.5'
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
