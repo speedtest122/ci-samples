@@ -26,11 +26,7 @@ jobs:
       - name: Enable emulator
       
         run: |
-          adb start-server
-          adb devices
-          sudo netstat -tulpn|grep 5554
-          adb -e reboot
-          adb devices
+          /usr/bin/sh -c \/usr/local/lib/android/sdk/emulator/emulator -avd test -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim &
 
   
 
