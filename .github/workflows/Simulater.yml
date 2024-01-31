@@ -15,19 +15,32 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      - name: run tests
-        uses: NguyenDuyThanhB1909984/android-emulator-runner@v2.30.1
-        with:
-          api-level: 29
-          script: |
-            echo $GITHUB_REPOSITORY
-            adb devices
+      # - name: run tests
+      #   uses: NguyenDuyThanhB1909984/android-emulator-runner@v2.30.1
+      #   with:
+      #     api-level: 29
+      #     script: |
+      #       echo $GITHUB_REPOSITORY
+      #       adb devices
             
       - name: Enable emulator
       
         run: |
-          /usr/bin/sh -c \/usr/local/lib/android/sdk/emulator/emulator -avd test -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim &
+      
+          # Cài đặt Android SDK
+          sudo chown $USER:$USER /usr/local/lib/android/sdk -R
+          yes | sdkmanager --licenses > /dev/null
+          sdkmanager --install 'build-tools;34.0.0' platform-tools > /dev/null
+          sdkmanager --install emulator --channel=0 > /dev/null
+          sdkmanager --install 'system-images;android-29;default;x86' --channel=0 > /dev/null
+      
+          # Khởi chạy Emulator
+          avdmanager create avd --force -n test --abi 'default/x86' --package 'system-images;android-29;default;x86'
+          /usr/local/lib/android/sdk/emulator/emulator -avd test -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim &
+      
+          # Chạy các lệnh trong emulator
+          echo $GITHUB_REPOSITORY
+          adb devices
 
-  
 
            
