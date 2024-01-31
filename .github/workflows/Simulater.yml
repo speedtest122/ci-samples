@@ -24,7 +24,11 @@ jobs:
             adb devices
             
       - name: Enable emulator
-        run: adb emu start emulator-5554 -wipe-data
+      
+        run: |
+          adb start-server
+          adb devices
+          adb emu start emulator-5554 -wipe-data
 
   
 
