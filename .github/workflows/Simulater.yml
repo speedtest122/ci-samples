@@ -29,7 +29,7 @@ jobs:
           adb start-server
           adb devices
           netstat -tulpn|grep 5554
-          adb emu start emulator-5554 -wipe-data
+          adb -e reboot
 
   
 
