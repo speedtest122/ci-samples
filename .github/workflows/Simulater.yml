@@ -28,7 +28,7 @@ jobs:
         run: |
           adb start-server
           adb devices
-          netstat -tulpn|grep 5554
+          sudo netstat -tulpn|grep 5554
           adb -e reboot
           adb devices
 
