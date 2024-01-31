@@ -30,6 +30,7 @@ jobs:
           adb devices
           netstat -tulpn|grep 5554
           adb -e reboot
+          adb devices
 
   
 
