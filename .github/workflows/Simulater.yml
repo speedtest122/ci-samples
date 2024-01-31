@@ -22,6 +22,10 @@ jobs:
           script: |
             echo $GITHUB_REPOSITORY
             adb devices
+            
+      - name: Enable emulator
+        run: adb emu start emulator-5554 -wipe-data
+
   
 
            
